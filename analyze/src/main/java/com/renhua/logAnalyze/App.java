@@ -1,4 +1,4 @@
-package com.tianya.bbs.elasticsearch.analyze;
+package com.renhua.logAnalyze;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,11 +29,12 @@ import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms.Bucket;
 
-import com.tianya.bbs.elasticsearch.analyze.bean.ErrorLogStat;
+import com.renhua.logAnalyze.bean.ErrorLogStat;
 
 /**
- * Hello world!
- *
+ * @author renhua
+ * 程序入口
+ * 2016年3月19日
  */
 public class App {
 	
@@ -65,7 +66,7 @@ public class App {
     	logger.info("indices : " + indices);
     	logger.info("host : " + host);
         Settings settings = ImmutableSettings.settingsBuilder()
-        		.put("cluster.name","es_bbs")
+        		.put("cluster.name","es_log")
         		.build();
         Client client = new TransportClient(settings)
         		.addTransportAddress(new InetSocketTransportAddress(host, 9300));
@@ -143,7 +144,7 @@ public class App {
     	if (stat.getStackTrace() != null && !stat.getStackTrace().isEmpty()) {
     		stackMessage = stat.getStackTrace().replaceAll("\\bat\\b", "<br>at");
 		}
-    	String suggestions = String.format("<h2>Hi %s 我是论坛管家~ </h2>"
+    	String suggestions = String.format("<h2>Hi %s 我是应用日志管家~ </h2>"
     			+ "<br><br>您的应用 %s 现在出现了一些问题哦!\n"
     			+ "<br><br>时间：%s - %s"
     			+ "<br><br>类名：%s"

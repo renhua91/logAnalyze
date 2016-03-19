@@ -3,24 +3,20 @@
 <project>
 
 	<facilities>
-		<!-- analyze 为分析日志系统自己出现故障时所用，请勿删除 -->
-		<facility name = "analyze" admins="renhua" />
-		<!-- 以下为各个业务所用  -->
-		<facility name = "tianyaqingweb" admins="renhua" />
-		<facility name = "tianyaqingtouch" admins="renhua" />
-		<facility name = "post_web" admins="zhuyf,wuzhongbao,zhougb" />
-		<facility name = "post_ice" admins="zhuyf,wuzhongbao,zhougb" />
-		<facility name = "post_task" admins="zhuyf,wuzhongbao,zhougb" />
-		<facility name = "tianyaviewlogice" admins="zhuyf,wuzhongbao,zhougb" />
-		<facility name = "tianyauserice" admins="liyh" />
-		<facility name = "tianyaartice" admins="liyh" />
-		<facility name = "tianyawirelessice" admins="liyh" />
-		<facility name = "tianyacacheclear" admins="liyh" />
-		<facility name = "tianyaicecheck" admins="liyh" />
-		
+		<!-- 收集的各个应用的负责人信息 -->
+		<facility name = "应用1" admins="renhua" />
+		<facility name = "应用2" admins="renhua" />
+		<facility name = "应用3" admins="renhua" />
 	</facilities>
 	
-	<sender address = "monitor-ltcp@staff.tianya.cn" password = "TY$#21@monitor."/>
+	<!-- 这里填写报警邮箱的账号密码 -->
+	<sender address = "110@qq.com" password = "123456"/>
+	
+	<!-- 日志管家系统管理员信息 -->
+	<logAdmin name = "logAdmin" email = "logAdmin@qq.com" />
+	
+	<!-- 公司统一邮箱后缀 -->
+	<company emailSuffix = "xxx.com"/>
 
 </project>
 

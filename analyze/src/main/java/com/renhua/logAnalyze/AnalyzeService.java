@@ -1,16 +1,19 @@
-package com.tianya.bbs.elasticsearch.analyze;
+package com.renhua.logAnalyze;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.stereotype.Component;
 
-import com.tianya.bbs.elasticsearch.analyze.bean.ErrorLogStat;
-import com.tianya.bbs.elasticsearch.analyze.charts.AnalyzeChartFactory;
+import com.renhua.logAnalyze.bean.ErrorLogStat;
+import com.renhua.logAnalyze.charts.AnalyzeChartFactory;
 
-@Component
+/**
+ * @author renhua
+ * 分析类
+ * 2016年3月19日
+ */
 public class AnalyzeService {
 	private static Log logger = LogFactory.getLog(AnalyzeService.class);
 	

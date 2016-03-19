@@ -2,8 +2,8 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.tianya.bbs.elasticsearch</groupId>
-  <artifactId>analyze</artifactId>
+  <groupId>com.renhua</groupId>
+  <artifactId>logAnalyze</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
@@ -13,7 +13,6 @@
   <properties>
     <project.build.directory>/target</project.build.directory>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <org.springframework.version>3.2.3.RELEASE</org.springframework.version>
     <org.testng.version>6.8.8</org.testng.version>
   </properties>
   
@@ -139,12 +138,6 @@
   </repositories>
 
   <dependencies> 
-  	<dependency>
-		<groupId>org.springframework</groupId>
-		<artifactId>spring-context</artifactId>
-		<version> ${org.springframework.version} </version>
-	</dependency>
-  
     <dependency>
 		<groupId>org.elasticsearch</groupId>
 		<artifactId>elasticsearch</artifactId>

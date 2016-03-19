@@ -1,4 +1,4 @@
-package com.tianya.bbs.elasticsearch.analyze;
+package com.renhua.logAnalyze;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -15,20 +15,24 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import com.tianya.bbs.elasticsearch.analyze.email.SendMail;
-import com.tianya.bbs.elasticsearch.analyze.email.Sender;
+import com.renhua.logAnalyze.email.SendMail;
+import com.renhua.logAnalyze.email.Sender;
 
 /**
- * @author JackRen
+ * @author renhua
  * 项目配置相关的基础类
+ * 2016年3月19日
  */
 public class ConfigUtil {
 	private static final String FILE_NAME = "analyze.xml";
 	private static final String FILE_PATH = ConfigUtil.class.getClassLoader().getResource(FILE_NAME).getPath(); 
 	private static final String SUBJECT = "logReport for ";
 	private static Sender SENDER = null;
+	private static String ADMIN = null;
+	private static String ADMIN_EMAIL = null;
+	private static String EMAIL_SUFFIX = null;
 	private static ConcurrentMap<String, String> configMap = new ConcurrentHashMap<String, String>();
-	public static final long ERROR_COUNT = 1000;
+	public static final long ERROR_COUNT = 1000;	//错误阀值
 	
 	static {
 		readXml();
@@ -49,13 +53,31 @@ public class ConfigUtil {
 			if (sender != null) {
 				SENDER = new Sender(sender.attributeValue("address"), sender.attributeValue("password"));
 			}else {
-				throw new RuntimeException("没有配置发件邮箱及相关信息！");
+				throw new RuntimeException("没有在analyze.xml中配置发件邮箱及相关信息！");
+			}
+			Element logAdmin = project.element("logAdmin");
+			if (logAdmin != null) {
+				ADMIN = logAdmin.attributeValue("name");
+				ADMIN_EMAIL = logAdmin.attributeValue("email");
+			}else {
+				throw new RuntimeException("没有在analyze.xml中配置日志系统管理员信息！");
+			}
+			Element company = project.element("company");
+			if (company != null) {
+				EMAIL_SUFFIX = company.attributeValue("emailSuffix");
+			}else {
+				throw new RuntimeException("没有在analyze.xml中配置公司统一邮箱后缀！");
 			}
 		} catch (DocumentException e) {
 			e.printStackTrace();
 		}
 	}
 	
+	/**
+	 * 获取某个应用的负责人
+	 * @param facilityName
+	 * @return
+	 */
 	public static String getAdminNames(String facilityName) {
 		if (facilityName != null && !facilityName.isEmpty()) {
 			facilityName = facilityName.toLowerCase();
@@ -63,17 +85,27 @@ public class ConfigUtil {
 			if (adminNames != null && !adminNames.isEmpty()) {
 				return adminNames;
 			}else{
-				return "renhua";
+				return ADMIN;
 			}
 		}else {
-			return "renhua";
+			return ADMIN;
 		}
 	}
 	
+	/**
+	 * 主管的邮箱（除了发邮件给应用负责人，还抄送给主管一份）
+	 * @return
+	 */
 	private static String getCCMail() {
-		return "wangliang@staff.tianya.cn";
+		return "";
 	}
 	
+	/**
+	 * 获取应用负责人的邮箱列表
+	 * @param facilityName
+	 * @return
+	 * @throws MessagingException
+	 */
 	private static String getAdminMailList(String facilityName) throws MessagingException {
 		if (facilityName != null && !facilityName.isEmpty()) {
 			facilityName = facilityName.toLowerCase();
@@ -91,20 +123,28 @@ public class ConfigUtil {
 					}
 					return sb.toString();
 				} else {
-					return "renhua@staff.tianya.cn";
+					return ADMIN_EMAIL;
 				} 
 			}else{
 				return getMail(facilityName.substring(index + 1));
 			}
 		}else{
-			return "renhua@staff.tianya.cn";
+			return ADMIN_EMAIL;
 		}
 	}
 	
 	public static String getMail(String adminName) {
-		return adminName + "@staff.tianya.cn";
+		return adminName + "@" + EMAIL_SUFFIX;
 	}
 	
+	/**
+	 * 发送邮件的方法
+	 * @param facilityName
+	 * @param subject
+	 * @param textContent
+	 * @param picPath
+	 * @throws Exception
+	 */
 	public static void sendMail(String facilityName, String subject, String textContent, 
 			String picPath) throws Exception {
 		String content = textContent; 
@@ -133,17 +173,11 @@ public class ConfigUtil {
 	public static String getSignature() {
 		StringBuffer signature = new StringBuffer()
 				.append("<br><br>建议手册：")
-				.append("1、去<a href='http://124.225.214.143/'>日志平台</a>看更详细内容    ")
-				.append("2、打开<a href='http://amm.yanfa.tianya.cn/appindex'>amm运维平台</a>查看服务器状态    ")
-				.append("3、打开<a href='https://it.tytech.tianya.cn/'>it运维平台重启某台机器</a>")
-				.append("<p>此致，敬礼 <br>论坛管家</p>");
+				.append("1、****    ")
+				.append("2、****    ")
+				.append("3、****    ")
+				.append("<p>此致，敬礼 <br>应用日志管家</p>");
 		return signature.toString();
-	}
-	
-	public static void main(String[] args) throws Exception {
-//		sendMail("tianyaQingWeb", "日志收集系统-汇报邮件-请勿回复", "下面是一个图片","C:/Users/M7011DEY/Pictures/pie.jpg");
-		System.out.println(getAdminMailList("post_task#zhuyf"));
-		System.out.println("finish");
 	}
 	
 }
