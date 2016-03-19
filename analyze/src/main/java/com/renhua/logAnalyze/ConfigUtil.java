@@ -110,23 +110,24 @@ public class ConfigUtil {
 		if (facilityName != null && !facilityName.isEmpty()) {
 			facilityName = facilityName.toLowerCase();
 			int index = facilityName.indexOf("#");
+			String admins = ADMIN_EMAIL;
 			if (index < 0) {
-				String admins = configMap.get(facilityName);
-				if (admins != null && !admins.isEmpty()) {
-					String[] s = admins.split(",");
-					StringBuffer sb = new StringBuffer();
-					for (int i = 0; i < s.length; i++) {
-						sb.append(getMail(s[i]));
-						if (i != s.length - 1) {
-							sb.append(",");
-						}
-					}
-					return sb.toString();
-				} else {
-					return ADMIN_EMAIL;
-				} 
+				admins = configMap.get(facilityName);
 			}else{
-				return getMail(facilityName.substring(index + 1));
+				admins = facilityName.substring(index + 1);
+			}
+			if (admins != null && !admins.isEmpty()) {
+				String[] s = admins.split(",");
+				StringBuffer sb = new StringBuffer();
+				for (int i = 0; i < s.length; i++) {
+					sb.append(getMail(s[i]));
+					if (i != s.length - 1) {
+						sb.append(",");
+					}
+				}
+				return sb.toString();
+			} else {
+				return ADMIN_EMAIL;
 			}
 		}else{
 			return ADMIN_EMAIL;
